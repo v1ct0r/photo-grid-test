@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unsplash/home_page.dart';
+import 'package:unsplash/router.dart';
 import 'package:unsplash/services/api.dart';
 import 'package:unsplash/services/unsplash_credentials.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
         ),
         home: HomePage(),
+        onGenerateRoute: Router.onGenerateRoute,
       ),
     );
   }
