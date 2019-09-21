@@ -6,7 +6,7 @@ class PhotosModel extends ChangeNotifier {
   Api api;
 
   List<Photo> photos;
-  bool loading = false;
+  bool loading = true;
 
   Future fetchPhotos() async {
     loading = true;
