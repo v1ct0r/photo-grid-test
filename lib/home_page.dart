@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unsplash/helpers/media_query_helper.dart';
 import 'package:unsplash/viewmodels/photos_model.dart';
 import 'package:unsplash/views/photo_tile.dart';
 
@@ -19,6 +20,14 @@ class HomePage extends StatelessWidget {
               photosModel..api = api;
               return photosModel;
             },
+          ),
+          ProxyProvider<Api, MediaQueryHelper>(
+            initialBuilder: (context) => MediaQueryHelper(),
+            builder: (context, _, mediaQueryHelper) => MediaQueryHelper()..width = MediaQuery.of(context).size.width,
+            updateShouldNotify: (previous, current) {
+              // notify only when screen width changes
+              return current.isSmallScreen != previous.isSmallScreen;
+              },
           ),
         ],
         child: new PhotoGrid(),
@@ -48,17 +57,21 @@ class _PhotoGridState extends State<PhotoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PhotosModel>(
-      builder: (context, photoModel, _) {
+    return Consumer2<PhotosModel, MediaQueryHelper>(
+      builder: (context, photoModel, layoutDetector, _) {
         if (photoModel.loading) {
           return Center(child: CircularProgressIndicator(),);
         } else {
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (context, index) => PhotoTile(
-              photo: photoModel.photos[index],
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: layoutDetector.isSmallScreen ? 0 : 30),
+            color: Colors.black12,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200),
+              itemBuilder: (context, index) => PhotoTile(
+                photo: photoModel.photos[index],
+              ),
+              itemCount: photoModel.photos.length,
             ),
-            itemCount: photoModel.photos.length,
           );
         }
       },
