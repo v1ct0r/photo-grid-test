@@ -17,24 +17,50 @@ class PhotoTile extends StatelessWidget {
       AspectRatio(
         aspectRatio: 1.0,
         child: GridTile(
-          child: Hero(
+          footer: Text(photo != null ? '${photo.pageIndex}' : ''),
+          child: photo != null ? Hero(
             tag: 'hero-tag-${photo.id}',
             child: FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
               image: photo.thumbUrl,
               fit: BoxFit.cover,
             ),
-          ),
+          ) : Container(),
         ),
       ),
       Positioned.fill(
         child: new Material(
           color: Colors.transparent,
-          child: new InkWell(
+          child: photo != null ? InkWell(
             onTap: () => Navigator.of(context)
-                .pushNamed(RoutePaths.details, arguments: photo)),
+                .pushNamed(RoutePaths.details, arguments: photo)) : null,
         )
       ),
     ]);
   }
+
+// there is a memory leak issue related to images
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return AspectRatio(
+//        aspectRatio: 1.0,
+//        child: GridTile(
+//          footer: Text(photo != null ? '${photo.pageIndex}' : ''),
+//          child: photo != null ? Hero(
+//            tag: 'hero-tag-${photo.id}',
+//            child: Ink.image(
+//              image: Image.network(
+//                photo.thumbUrl,
+//                fit: BoxFit.cover,
+//              ).image,
+//              fit: BoxFit.cover,
+//              child: InkWell(
+//                onTap: () {},
+//              ),
+//            )
+//          ) : Container(),
+//        ),
+//      );
+//  }
 }

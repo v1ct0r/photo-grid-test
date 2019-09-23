@@ -51,7 +51,7 @@ class _PhotoGridState extends State<PhotoGrid> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<PhotosModel>(context, listen: false).fetchPhotos();
+      Provider.of<PhotosModel>(context, listen: false).fetchPage();
     });
   }
 
@@ -68,9 +68,9 @@ class _PhotoGridState extends State<PhotoGrid> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200),
               itemBuilder: (context, index) => PhotoTile(
-                photo: photoModel.photos[index],
+                photo: photoModel.getPhoto(index),
               ),
-              itemCount: photoModel.photos.length,
+              itemCount: photoModel.photoLength,
             ),
           );
         }

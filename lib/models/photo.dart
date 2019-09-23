@@ -2,6 +2,7 @@ class Photo {
   final String id;
   final String thumbUrl;
   final String regularUrl;
+  int pageIndex;
 
   Photo(
       this.id,
